@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import user from "../models/user";
+import User from "../models/user";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 async function auth(request: Request, response: Response) {
@@ -14,12 +14,39 @@ async function auth(request: Request, response: Response) {
     }
 }
 
-async function login(request: Request, response: Response) {
-    const { username, email, password } = request.body;
-    const userInfo = new user({ username, email, password });
-    await userInfo.save();
-    const token = jwt.sign({ username, email }, process.env.JWT || "", { expiresIn: '2h' });
-    return response.status(200).send(token);
+async function register(request: Request, response: Response) {
+    try {
+        const { username, email, password } = request.body;
+        const validateUsername = await User.findOne({ username });
+        const validateEmail = await User.findOne({ email });
+        console.log(validateEmail)
+        if (!validateEmail && !validateUsername) {
+            const userInfo = new User({ username, email, password });
+            await userInfo.save();
+            return response.status(200).send("Registered successfully")
+        } else {
+            return response.status(400).send("Username or email already exists")
+        }
+    } catch {
+        return response.status(400).send("Error registering")
+    }
 }
 
-export { auth, login }
+async function login(request: Request, response: Response) {
+    try {
+        const { email, password } = request.body;
+        const userInfo = await User.findOne({ email });
+        console.log(userInfo?.password === password)
+        if (userInfo && userInfo.password === password) {
+            const data = { username: userInfo.username, email: userInfo.email }
+            const token = jwt.sign(data, process.env.JWT || "", { expiresIn: '2h' });
+            return response.status(200).send(token);
+        } else {
+            return response.status(400).send("Incorrect email or password")
+        }
+    } catch {
+        return response.status(400).send("Incorrect email or password")
+    }
+}
+
+export { auth, register, login }

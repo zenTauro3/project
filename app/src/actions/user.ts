@@ -1,14 +1,15 @@
-import { SET, REMOVE } from "../config/constants"
+import { ADD } from "../config/constants"
 
-export const setUser = (payload: { username: string, email: string }) => {
-    const { username, email } = payload;
-    return { type: SET, username, email }
+interface UserData {
+    username: string,
+    email: string
 }
 
-export const removeUser = () => {
-    return { type: REMOVE, username: '', email: '' }
+export const addUser = (data: UserData) => {
+    const { username, email } = data;
+    return { type: ADD, payload: { username, email } }
 }
 
 export const getUser = () => {
-    return (state: { user: { username: string, email: string } }) => state.user
+    return (state: { user: UserData }) => state.user
 }

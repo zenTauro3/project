@@ -1,4 +1,12 @@
-import { SET, REMOVE } from "../config/constants"
+import { ADD } from "../config/constants"
+
+interface actionData {
+    type: string,
+    payload: {
+        username: string,
+        email: string
+    }
+}
 
 const initialState = {
     user: {
@@ -7,23 +15,13 @@ const initialState = {
     }
 }
 
-const reducer = (state = initialState, action: { type: string, username: string, email: string }) => {
+function reducer(state = initialState, action: actionData) {
     switch (action.type) {
-        case SET:
+        case ADD:
+            const { username, email } = action.payload;
             return {
-                user: {
-                    username: action.username,
-                    email: action.email
-                }
+                user: { username, email }
             };
-        case REMOVE:
-            return {
-                user: {
-                    username: '',
-                    email: ''
-                }
-            }
-
         default: return state
     }
 }

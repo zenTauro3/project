@@ -1,24 +1,22 @@
+import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import auth from "../services/auth";
-import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser, getUser } from "../actions/user";
+import { useDispatch } from "react-redux";
+import { addUser } from "../actions/user";
+import auth from "../services/auth";
 
 function PrivateRoute({ component }: { component: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(true);
     const dispatch = useDispatch();
-    const user = useSelector(getUser()).username;
     const token = Cookies.get("token");
 
     useEffect(() => {
-        if (token) {
-            auth(token)
-                .then(data => dispatch(setUser(data)))
-                .finally(() => setLoading(false))
-        } else {
-            setLoading(false)
-        }
+        auth(token)
+            .then(data => dispatch(addUser(data)))
+            .catch(() => setUser(false))
+            .finally(() => setLoading(false))
+
     }, [dispatch, token])
 
     if (loading) {

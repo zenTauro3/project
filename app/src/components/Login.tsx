@@ -4,18 +4,25 @@ import Cookies from "js-cookie";
 import login from "../services/login";
 
 function Login() {
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [state, setState] = useState(true);
+
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("")
+    const [password, setPassword] = useState("");
+
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
     const handleEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setEmail(event.target.value)
+        const email = event.target.value;
+        setState(email && password ? false : true);
+        setEmail(email);
     };
 
     const handlePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPassword(event.target.value)
+        const password = event.target.value;
+        setState(email && password ? false : true);
+        setPassword(password);
     }
 
     const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
@@ -33,7 +40,7 @@ function Login() {
                 <input value={email} onChange={handleEmail} type="email" placeholder="Email" />
                 <input value={password} onChange={handlePassword} type="password" placeholder="Password" />
                 <Link to="/register">Don't have an account yet?</Link>
-                <button>Login</button>
+                <button disabled={state}>Login</button>
                 {loading && <p>Loading...</p>}
                 <p>{message}</p>
             </form>

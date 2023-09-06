@@ -1,11 +1,13 @@
-import { ADD } from "../config/constants"
+import { ADD_USER } from "../config/constants"
 
-interface actionData {
+interface UserData {
+    username: string,
+    email: string
+}
+
+interface ActionData {
     type: string,
-    payload: {
-        username: string,
-        email: string
-    }
+    payload: UserData
 }
 
 const initialState = {
@@ -15,9 +17,9 @@ const initialState = {
     }
 }
 
-function reducer(state = initialState, action: actionData) {
+function reducer(state = initialState, action: ActionData) {
     switch (action.type) {
-        case ADD:
+        case ADD_USER:
             const { username, email } = action.payload;
             return {
                 user: { username, email }

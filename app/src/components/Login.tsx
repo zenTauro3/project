@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import login from "../services/login";
+import url from "../config/google";
 
 function Login() {
     const [loading, setLoading] = useState(false);
@@ -32,6 +33,11 @@ function Login() {
             .then(token => { Cookies.set("token", token); navigate("/home") })
             .catch(error => setMessage(error.response.data))
             .finally(() => setLoading(false))
+    };
+
+    const handleGoogle = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        window.location.href = url
     }
 
     return (
@@ -42,6 +48,8 @@ function Login() {
                 <Link to="/register">Don't have an account yet?</Link>
                 <button disabled={state}>Login</button>
                 {loading && <p>Loading...</p>}
+                <p>or</p>
+                <button onClick={handleGoogle}>Continue with Google</button>
                 <p>{message}</p>
             </form>
         </div>

@@ -1,4 +1,4 @@
-import { ADD } from "../config/constants"
+import { ADD_USER} from "../config/constants"
 
 interface UserData {
     username: string,
@@ -7,7 +7,7 @@ interface UserData {
 
 export const addUser = (data: UserData) => {
     const { username, email } = data;
-    return { type: ADD, payload: { username, email } }
+    return { type: ADD_USER, payload: { username, email } }
 }
 
 export const getUser = () => {

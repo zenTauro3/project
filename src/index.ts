@@ -28,7 +28,7 @@ const PORT = process.env.SERVER_PORT || 3001;
 const URL = process.env.SERVER_DOMAIN + ":" + PORT;
 const message = "\x1b[35m" + URL + "\x1b[0m";
 
-connection.on("open", () => {
+connection.once("open", () => {
     console.log("Connected successfully to database");
     app.listen(PORT, () => console.log("Server running at", message));
 });

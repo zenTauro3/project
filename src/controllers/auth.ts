@@ -1,7 +1,9 @@
 import { Request, Response } from "express"
 import User from "../models/user";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 import bcrypt from "bcrypt";
+import axios from "axios"
 
 async function auth(request: Request, response: Response) {
     try {
@@ -70,4 +72,18 @@ async function login(request: Request, response: Response) {
     }
 }
 
-export { auth, register, login }
+async function google(request: Request, response: Response) {
+    try {
+        const { access_token } = request.body;
+        const url = 'https://www.googleapis.com/oauth2/v1/userinfo';
+
+        const result = await axios.get(url, { headers: { 'Authorization': `Bearer ${access_token}` } });
+        const data = { username: result.data.name, email: result.data.email };
+        const token = jwt.sign(data, process.env.JWT || "", { expiresIn: '2h' });
+        response.status(200).send(token);
+    } catch {
+        return response.status(500).send("Google error");
+    }
+}
+
+export { auth, register, login, google }

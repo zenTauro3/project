@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import User from "../models/user";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import { OAuth2Client } from "google-auth-library";
 import bcrypt from "bcrypt";
 import axios from "axios"
 
@@ -39,11 +38,11 @@ async function register(request: Request, response: Response) {
         }
 
         const hashed = await bcrypt.hash(password, 10);
-        const userInfo = new User({ username, email, password: hashed });
+        const userInfo = new User({ type: "standard", username, email, password: hashed });
         await userInfo.save();
         return response.status(200).send("Registered successfully")
     } catch {
-        return response.status(500).send("Error registering")
+        return response.status(500).send("Internal error")
     }
 }
 
@@ -60,15 +59,15 @@ async function login(request: Request, response: Response) {
         const userInfo = await User.findOne({ email });
         const isValid = await bcrypt.compare(password, userInfo?.password || "");
 
-        if (!userInfo || !isValid) {
+        if (!userInfo || !isValid || userInfo.type === "google") {
             return response.status(400).send("Incorrect email or password");
-        }
+        };
 
         const data = { username: userInfo.username, email: userInfo.email }
         const token = jwt.sign(data, process.env.JWT || "", { expiresIn: '2h' });
         return response.status(200).send(token);
     } catch {
-        return response.status(500).send("Error loging in")
+        return response.status(500).send("Internal error")
     }
 }
 
@@ -76,14 +75,26 @@ async function google(request: Request, response: Response) {
     try {
         const { access_token } = request.body;
         const url = 'https://www.googleapis.com/oauth2/v1/userinfo';
-
         const result = await axios.get(url, { headers: { 'Authorization': `Bearer ${access_token}` } });
-        const data = { username: result.data.name, email: result.data.email };
+
+        const { name, email } = result.data;
+        const data = { type: "google", username: name, email }
+        const emailExists = await User.findOne({ email });
+
+        if (emailExists && emailExists.type === 'standard') {
+            return response.status(400).send("This email is registered by standard mode");
+        }
+
+        if (!emailExists) {
+            const userInfo = new User(data);
+            await userInfo.save();
+        }
+
         const token = jwt.sign(data, process.env.JWT || "", { expiresIn: '2h' });
         response.status(200).send(token);
     } catch {
-        return response.status(500).send("Google error");
+        return response.status(500).send("Internal error");
     }
 }
 
-export { auth, register, login, google }
+export { auth, register, login, google };

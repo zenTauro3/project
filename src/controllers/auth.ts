@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import User from "../models/user";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
 import bcrypt from "bcrypt";
 import axios from "axios"
 
@@ -71,30 +72,21 @@ async function login(request: Request, response: Response) {
     }
 }
 
+const CLIENT_ID = "64303496614-qts46aqj3g3pqj7hg3jpnkd9ovm9q4cf.apps.googleusercontent.com";
+const client = new OAuth2Client();
+
 async function google(request: Request, response: Response) {
-    try {
-        const { access_token } = request.body;
-        const url = 'https://www.googleapis.com/oauth2/v1/userinfo';
-        const result = await axios.get(url, { headers: { 'Authorization': `Bearer ${access_token}` } });
+    const { credential } = request.body;
 
-        const { name, email } = result.data;
-        const data = { type: "google", username: name, email }
-        const emailExists = await User.findOne({ email });
+    const ticket = await client.verifyIdToken({
+        idToken: credential,
+        audience: CLIENT_ID
+    });
 
-        if (emailExists && emailExists.type === 'standard') {
-            return response.status(400).send("This email is registered by standard mode");
-        }
+    const payload = ticket.getPayload();
 
-        if (!emailExists) {
-            const userInfo = new User(data);
-            await userInfo.save();
-        }
-
-        const token = jwt.sign(data, process.env.JWT || "", { expiresIn: '2h' });
-        response.status(200).send(token);
-    } catch {
-        return response.status(500).send("Internal error");
-    }
+    console.log(payload)
+    return response.status(200).send()
 }
 
 export { auth, register, login, google };

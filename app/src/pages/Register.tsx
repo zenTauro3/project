@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import GoogleRegister from "../components/GoogleRegister";
 import register from "../services/register";
-import url from "../config/google";
 
 function Register() {
     const [loading, setLoading] = useState(false);
@@ -57,10 +57,6 @@ function Register() {
             .finally(() => setLoading(false))
     }
 
-    const handleGoogle = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-        window.location.href = url
-    }
     return (
         <div>
             <form onSubmit={handleRegister}>
@@ -74,7 +70,7 @@ function Register() {
                 <button disabled={state}>Register</button>
                 {loading && <p>Loading...</p>}
                 <p>or</p>
-                <button onClick={handleGoogle}>Continue with Google</button>
+                <GoogleRegister />
                 <p>{message}</p>
             </form>
         </div>

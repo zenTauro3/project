@@ -1,19 +1,16 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
+import google from '../services/google';
+import Cookies from 'js-cookie';
 
 // Constantes para valores estáticos
 const GOOGLE_CLIENT_ID = '64303496614-qts46aqj3g3pqj7hg3jpnkd9ovm9q4cf.apps.googleusercontent.com';
 
 const GoogleRegister: React.FC = () => {
-  const handleGoogle = async (event: any) => {
-    const credential = event.credential;
-    try {
-      const response = await axios.post('http://localhost:3001/auth/google', { credential });
-      console.log(response);
-    } catch (error) {
-      console.error('Error al iniciar sesión con Google:', error);
-    }
-  };
+  const handleGoogle = (event: any) => {
+    google(event)
+      .then(token => Cookies.set("token", token))
+      .catch(error => console.log(error))
+  }
 
   const initialize = () => {
     const script = document.createElement('script');

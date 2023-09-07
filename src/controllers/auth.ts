@@ -72,21 +72,31 @@ async function login(request: Request, response: Response) {
     }
 }
 
-const CLIENT_ID = "64303496614-qts46aqj3g3pqj7hg3jpnkd9ovm9q4cf.apps.googleusercontent.com";
+const CLIENT_ID = process.env.GOOGLE_CLIENT;
 const client = new OAuth2Client();
 
 async function google(request: Request, response: Response) {
-    const { credential } = request.body;
+    try {
+        const { credential } = request.body;
 
-    const ticket = await client.verifyIdToken({
-        idToken: credential,
-        audience: CLIENT_ID
-    });
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: CLIENT_ID
+        });
 
-    const payload = ticket.getPayload();
+        const payload = ticket.getPayload();
 
-    console.log(payload)
-    return response.status(200).send()
+        if (payload) {
+            const { name, email } = payload;
+            console.log(name, email);
+            const token = jwt.sign({ username: name, email }, process.env.JWT || "", { expiresIn: '2h' });
+            return response.status(200).send(token);
+        } else {
+            return response.status(400).send()
+        }
+    } catch {
+        return response.status(500).send("Internal error");
+    }
 }
 
 export { auth, register, login, google };

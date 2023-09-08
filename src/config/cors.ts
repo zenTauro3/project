@@ -2,7 +2,6 @@ import { CorsOptions } from "cors";
 
 const corsOptions: CorsOptions = {
     origin: (origin, callback) => {
-        console.log(origin);
         if (origin === process.env.CLIENT_DOMAIN) {
             callback(null, true);
         } else {

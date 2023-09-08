@@ -9,4 +9,13 @@ async function register(username: string, email: string, password: string) {
     }
 }
 
-export default register
+async function check(username: string) {
+    try {
+        const response = await axios.get(`http://localhost:3001/auth/register/${username}`);
+        return response.data
+    } catch (error) {
+        throw error
+    }
+};
+
+export { register, check }

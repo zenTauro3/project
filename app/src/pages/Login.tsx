@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import GoogleLogin from "../components/GoogleLogin";
+import GoogleButton from "../components/GoogleButton";
 import login from "../services/login"
 import Cookies from "js-cookie";
 
@@ -38,13 +38,14 @@ function Login() {
     return (
         <div>
             <form onSubmit={handleLogin}>
+                <Link to="/">Go back</Link>
                 <input value={email} onChange={handleEmail} type="email" placeholder="Email" />
                 <input value={password} onChange={handlePassword} type="password" placeholder="Password" />
-                <Link to="/register">Don't have an account yet?</Link>
+                <Link to="/auth/register">Don't have an account yet?</Link>
                 <button disabled={state}>Login</button>
                 {loading && <p>Loading...</p>}
                 <p>or</p>
-                <GoogleLogin />
+                <GoogleButton />
                 <p>{message}</p>
             </form>
         </div>

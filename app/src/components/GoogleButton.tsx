@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import google from '../services/google';
 import Cookies from 'js-cookie';
 
@@ -6,10 +7,16 @@ import Cookies from 'js-cookie';
 const GOOGLE_CLIENT_ID = '64303496614-qts46aqj3g3pqj7hg3jpnkd9ovm9q4cf.apps.googleusercontent.com';
 
 const GoogleRegister: React.FC = () => {
+  const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+
   const handleGoogle = (event: any) => {
     google(event)
-      .then(token => Cookies.set("token", token))
-      .catch(error => console.log(error))
+      .then(token => {
+        Cookies.set("token", token);
+        navigate("/home");
+      })
+      .catch(error => setMessage(error.response.data))
   }
 
   const initialize = () => {
@@ -22,7 +29,7 @@ const GoogleRegister: React.FC = () => {
     script.onload = () => {
       (window as any).google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
-        context: 'signup',
+        context: 'use',
         ux_mode: 'popup',
         callback: handleGoogle,
         nonce: '',
@@ -56,10 +63,11 @@ const GoogleRegister: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <>
       <div id="g_id_signin"></div>
-    </div>
-  );
+      <p>{message}</p>
+    </>
+  )
 };
 
 export default GoogleRegister;

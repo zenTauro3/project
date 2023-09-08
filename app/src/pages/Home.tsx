@@ -10,7 +10,7 @@ function Home() {
     const handleLogout = (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         Cookies.remove("token")
-        navigate("/login")
+        navigate("/auth/login")
     }
 
     return (

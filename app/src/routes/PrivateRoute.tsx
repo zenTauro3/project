@@ -22,7 +22,7 @@ function PrivateRoute({ component }: { component: React.ReactNode }) {
     if (loading) {
         return <div>Loading...</div>
     } else {
-        return user ? component : <Navigate to="/login" />
+        return user ? component : <Navigate to="/auth/login" />
     }
 }
 

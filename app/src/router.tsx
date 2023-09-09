@@ -13,7 +13,7 @@ const router = createBrowserRouter([
   { path: "/", element: <PublicRoute component={<Main />} /> },
   { path: "/auth/register", element: <PublicRoute component={<Register />} /> },
   { path: "/auth/login", element: <PublicRoute component={<Login />} /> },
-  { path: "/home", element: <PrivateRoute component={<Home />} /> },
+  { path: "/home", element: <PrivateRoute component={<Home />} /> }
 ])
 
 export default router

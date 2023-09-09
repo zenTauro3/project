@@ -47,7 +47,7 @@ function Login() {
                         className="w-full border rounded-md py-2 px-3 focus:outline-none" />
                     <button disabled={state}
                         className={`disabled:opacity-75 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg w-full transition duration-300 ease-in-out ${state ? 'cursor-not-allowed' : 'transform hover:scale-105'}`}
-                    >{loading ? 'Loading...' : 'Login'}</button>
+                    >{loading ? 'Loading...' : 'Log in'}</button>
                     <p className="mt-2 text-red-500">{message}</p>
                 </form>
                 <div className="mb-4 flex items-center">

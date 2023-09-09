@@ -4,7 +4,7 @@ import google from '../services/google';
 import Cookies from 'js-cookie';
 
 // Constantes para valores estáticos
-const GOOGLE_CLIENT_ID = '64303496614-qts46aqj3g3pqj7hg3jpnkd9ovm9q4cf.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT;
 
 const GoogleRegister: React.FC = () => {
   const [message, setMessage] = useState("");
@@ -43,7 +43,7 @@ const GoogleRegister: React.FC = () => {
           shape: 'rectangular',
           theme: 'outline',
           text: 'continue_with',
-          size: 'large',
+          size: 'medium',
           logo_alignment: 'left',
         }
       );

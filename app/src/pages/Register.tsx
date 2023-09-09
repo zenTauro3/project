@@ -28,7 +28,7 @@ function Register() {
                 .then(() => setUsernameError(""))
                 .catch(error => setUsernameError(error.response.data))
         } else {
-            setUsernameError("Username: 8-30 characters, nor special characters neither spaces.");
+            setUsernameError("8-30 characters, no special chars or spaces");
         };
 
         setState(validateErrors && validateInputs ? false : true);
@@ -50,7 +50,7 @@ function Register() {
         const validate = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,50}$/.test(password);
         const validateErrors = validate && !emailError && !usernameError;
         const validateInputs = username && email && password;
-        setPasswordError(validate ? "" : "Password: 8-50 characters, lowercase, uppercase, 1 number.");
+        setPasswordError(validate ? "" : "8-50 characters, lowercase, uppercase and numbers");
         setState(validateErrors && validateInputs ? false : true);
         setPassword(password);
     }
@@ -65,24 +65,63 @@ function Register() {
     }
 
     return (
-        <div>
-            <form onSubmit={handleRegister}>
-                <Link to="/">Go back</Link>
-                <input value={username} onChange={handleUsername} type="text" placeholder="Username" />
-                {usernameError && <p>{usernameError}</p>}
-                <input value={email} onChange={handleEmail} type="email" placeholder="Email" />
-                {emailError && <p>{emailError}</p>}
-                <input value={password} onChange={handlePassword} type="password" placeholder="Password" />
-                {passwordError && <p>{passwordError}</p>}
-                <Link to="/login">Already have an account</Link>
-                <button disabled={state}>Register</button>
-                {loading && <p>Loading...</p>}
-                <p>or</p>
-                <GoogleButton />
-                <p>{message}</p>
-            </form>
+        <div className="min-h-screen bg-gray-200 flex items-center justify-center">
+            <div className="bg-white p-8 rounded shadow-md w-96 text-center">
+                <form onSubmit={handleRegister}>
+                    <Link to="/" className="mb-4 block text-blue-500 items-center text-left ">&#8617; Back</Link>
+                    <h1 className="text-xl mb-4">Create an account</h1>
+                    <div className="mb-4">
+                        <input
+                            value={username}
+                            onChange={handleUsername}
+                            type="text"
+                            placeholder="Username"
+                            className="w-full border rounded-md py-2 px-3 focus:outline-none"
+                        />
+                        {usernameError && <p className="text-red-500 mt-1 text-sm">{usernameError}</p>}
+                    </div>
+                    <div className="mb-4">
+                        <input
+                            value={email}
+                            onChange={handleEmail}
+                            type="email"
+                            placeholder="Email"
+                            className="w-full border rounded-md py-2 px-3 focus:outline-none"
+                        />
+                        {emailError && <p className="text-red-500 mt-1 text-sm">{emailError}</p>}
+                    </div>
+                    <div className="mb-4">
+                        <input
+                            value={password}
+                            onChange={handlePassword}
+                            type="password"
+                            placeholder="Password"
+                            className="w-full border rounded-md py-2 px-3 focus:outline-none"
+                        />
+                        {passwordError && <p className="text-red-500 mt-1 text-sm">{passwordError}</p>}
+                    </div>
+                    <button
+                        disabled={loading}
+                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full w-full transition duration-300 ease-in-out transform hover:scale-105"
+                    >
+                        {loading ? 'Loading...' : 'Register'}
+                    </button>
+                    <p className="mt-2 text-red-500">{message}</p>
+                </form>
+                <div className="mb-4 flex items-center">
+                    <div className="border-t border-gray-300 flex-grow"></div>
+                    <p className="mx-4 text-gray-500">or</p>
+                    <div className="border-t border-gray-300 flex-grow"></div>
+                </div>
+                <div className="flex justify-center mb-4">
+                    <GoogleButton />
+                </div>
+                <div className="">
+                    <Link to="/login" className="text-blue-500 hover:underline">Already have an account?</Link>
+                </div>
+            </div>
         </div>
-    )
+    );
 }
 
 export default Register

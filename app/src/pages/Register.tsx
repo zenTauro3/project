@@ -67,45 +67,21 @@ function Register() {
     return (
         <div className="min-h-screen bg-gray-200 flex items-center justify-center">
             <div className="bg-white p-8 rounded shadow-md w-96 text-center">
-                <form onSubmit={handleRegister}>
-                    <Link to="/" className="mb-4 block text-blue-500 items-center text-left ">&#8617; Back</Link>
+                <form className="space-y-4" onSubmit={handleRegister}>
+                    <Link to="/" className="mb-4 block text-blue-500 items-center text-left">&#8617; Return</Link>
                     <h1 className="text-xl mb-4">Create an account</h1>
-                    <div className="mb-4">
-                        <input
-                            value={username}
-                            onChange={handleUsername}
-                            type="text"
-                            placeholder="Username"
-                            className="w-full border rounded-md py-2 px-3 focus:outline-none"
-                        />
-                        {usernameError && <p className="text-red-500 mt-1 text-sm">{usernameError}</p>}
-                    </div>
-                    <div className="mb-4">
-                        <input
-                            value={email}
-                            onChange={handleEmail}
-                            type="email"
-                            placeholder="Email"
-                            className="w-full border rounded-md py-2 px-3 focus:outline-none"
-                        />
-                        {emailError && <p className="text-red-500 mt-1 text-sm">{emailError}</p>}
-                    </div>
-                    <div className="mb-4">
-                        <input
-                            value={password}
-                            onChange={handlePassword}
-                            type="password"
-                            placeholder="Password"
-                            className="w-full border rounded-md py-2 px-3 focus:outline-none"
-                        />
-                        {passwordError && <p className="text-red-500 mt-1 text-sm">{passwordError}</p>}
-                    </div>
-                    <button
-                        disabled={loading}
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-full w-full transition duration-300 ease-in-out transform hover:scale-105"
-                    >
-                        {loading ? 'Loading...' : 'Register'}
-                    </button>
+                    <input value={username} onChange={handleUsername} type="text" placeholder="Username"
+                        className="w-full border rounded-md py-2 px-3 focus:outline-none" />
+                    {usernameError && <p className="text-red-500 mt-1 text-sm">{usernameError}</p>}
+                    <input value={email} onChange={handleEmail} type="email" placeholder="Email"
+                        className="w-full border rounded-md py-2 px-3 focus:outline-none" />
+                    {emailError && <p className="text-red-500 mt-1 text-sm">{emailError}</p>}
+                    <input value={password} onChange={handlePassword} type="password" placeholder="Password"
+                        className="w-full border rounded-md py-2 px-3 focus:outline-none" />
+                    {passwordError && <p className="text-red-500 mt-1 text-sm">{passwordError}</p>}
+                    <button disabled={state}
+                        className={`disabled:opacity-75 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg w-full transition duration-300 ease-in-out ${state ? 'cursor-not-allowed' : 'transform hover:scale-105'}`}
+                    >{loading ? 'Loading...' : 'Register'}</button>
                     <p className="mt-2 text-red-500">{message}</p>
                 </form>
                 <div className="mb-4 flex items-center">
@@ -116,12 +92,13 @@ function Register() {
                 <div className="flex justify-center mb-4">
                     <GoogleButton />
                 </div>
-                <div className="">
-                    <Link to="/login" className="text-blue-500 hover:underline">Already have an account?</Link>
+                <div className="text-blue-500">
+                    <Link to="/auth/login" className="hover:underline">Already have an account?</Link>
                 </div>
             </div>
         </div>
     );
+
 }
 
 export default Register

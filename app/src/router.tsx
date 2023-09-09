@@ -9,7 +9,7 @@ import Login from "./pages/Login";
 import Home from "./pages/Home";
 
 const router = createBrowserRouter([
-  { path: "*", element: <PublicRoute component={<Navigate to="/auth/login" />} /> },
+  { path: "*", element: <PublicRoute component={<Navigate to="/" />} /> },
   { path: "/", element: <PublicRoute component={<Main />} /> },
   { path: "/auth/register", element: <PublicRoute component={<Register />} /> },
   { path: "/auth/login", element: <PublicRoute component={<Login />} /> },

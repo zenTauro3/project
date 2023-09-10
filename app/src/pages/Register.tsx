@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import GoogleButton from "../components/GoogleButton";
 import { register, check } from "../services/register";
 
@@ -16,13 +16,14 @@ function Register() {
     const [passwordError, setPasswordError] = useState("");
 
     const [message, setMessage] = useState("");
-    const navigate = useNavigate();
+    const [error, setError] = useState(false);
 
     const handleUsername = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const username = event.target.value;
         const validate = /^[a-zA-Z0-9_]{8,30}$/.test(username);
         const validateErrors = validate && !emailError && !passwordError;
         const validateInputs = username && email && password;
+
         if (validate) {
             check(username)
                 .then(() => setUsernameError(""))
@@ -59,8 +60,17 @@ function Register() {
         event.preventDefault();
         setLoading(true)
         register(username, email, password)
-            .then(() => navigate("/auth/login"))
-            .catch(error => setMessage(error.response.data))
+            .then((data) => {
+                setMessage(data);
+                setError(false);
+                setUsername("");
+                setEmail("");
+                setPassword("");
+            })
+            .catch(error => {
+                setMessage(error.response.data);
+                setError(true)
+            })
             .finally(() => setLoading(false))
     }
 
@@ -82,7 +92,7 @@ function Register() {
                     <button disabled={state}
                         className={`disabled:opacity-75 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg w-full transition duration-300 ease-in-out ${state ? 'cursor-not-allowed' : 'transform hover:scale-105'}`}
                     >{loading ? 'Loading...' : 'Register'}</button>
-                    <p className="mt-2 text-red-500">{message}</p>
+                    {message && <p className={error ? "mt-2 text-red-500" : "mt-2 text-green-500"}>{message}</p>}
                 </form>
                 <div className="mb-4 flex items-center">
                     <div className="border-t border-gray-300 flex-grow"></div>

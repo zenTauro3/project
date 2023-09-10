@@ -3,6 +3,8 @@ import User from "../models/user";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import bcrypt from "bcrypt";
+import smtp from "../utils/smtp";
+import crypto from "crypto";
 
 const client = new OAuth2Client();
 
@@ -42,10 +44,17 @@ async function register(request: Request, response: Response) {
             return response.status(400).send("This email is already in use");
         }
 
+        //generate key and send mail
+        const buffer = crypto.randomBytes(32);
+        const key = buffer.toString("hex");
+        await smtp.send(email, key);
+
+        //generate pass and save to database
         const hashed = await bcrypt.hash(password, 10);
-        const userInfo = new User({ type: "standard", username, email, password: hashed });
+        const userInfo = new User({ type: "standard", username, email, key, password: hashed });
         await userInfo.save();
-        return response.status(200).send("Registered successfully")
+
+        return response.status(200).send("We have sent you a verification email (check spam)")
     } catch {
         return response.status(500).send("Internal error")
     }
@@ -67,6 +76,23 @@ async function username(request: Request, response: Response) {
     }
 }
 
+async function verify(request: Request, response: Response) {
+    try {
+        const { key } = request.params;
+
+        const keyExists = await User.findOne({ key });
+
+        if (keyExists && keyExists.verified === false) {
+            await User.findOneAndUpdate({ key }, { $unset: { key: 1 }, $set: { verified: true } });
+            return response.sendStatus(200);
+        } else {
+            return response.sendStatus(400)
+        }
+    } catch {
+        return response.status(500).send("Internal error")
+    }
+}
+
 async function login(request: Request, response: Response) {
     try {
         const { email, password } = request.body;
@@ -79,7 +105,7 @@ async function login(request: Request, response: Response) {
         //validate database
         const userInfo = await User.findOne({ email });
 
-        if (!userInfo) {
+        if (!userInfo || userInfo.verified === false) {
             return response.status(400).send("Incorrect email");
         };
 
@@ -136,4 +162,4 @@ async function google(request: Request, response: Response) {
     }
 }
 
-export { auth, register, username, login, google };
+export { auth, register, username, verify, login, google };

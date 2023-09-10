@@ -47,14 +47,14 @@ async function register(request: Request, response: Response) {
         //generate key and send mail
         const buffer = crypto.randomBytes(32);
         const key = buffer.toString("hex");
-        await smtp.send(email, key);
+        smtp.send(email, key);
 
         //generate pass and save to database
         const hashed = await bcrypt.hash(password, 10);
         const userInfo = new User({ type: "standard", username, email, key, password: hashed });
         await userInfo.save();
 
-        return response.status(200).send("We have sent you a verification email (check spam)")
+        return response.status(200).send("We have sent you a verification email")
     } catch {
         return response.status(500).send("Internal error")
     }
@@ -110,7 +110,7 @@ async function login(request: Request, response: Response) {
         };
 
         if (userInfo.type !== "standard") {
-            return response.status(400).send("This account is registered by Google");
+            return response.status(400).send("Incorrect email (check method)");
         };
 
         const isValid = await bcrypt.compare(password, userInfo.password || "");
@@ -144,7 +144,7 @@ async function google(request: Request, response: Response) {
             const emailExists = await User.findOne({ email });
 
             if (emailExists && emailExists.type !== "google") {
-                return response.status(400).send("This account is registered by email and password")
+                return response.status(400).send("Account not available with Google")
             }
 
             if (!emailExists) {

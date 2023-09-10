@@ -16,7 +16,6 @@ function PublicRoute({ component }: { component: React.ReactNode }) {
             .then(() => setUser(true))
             .catch((error) => error.code === "ERR_NETWORK" && setError(true))
             .finally(() => setLoading(false));
-
     }, [token]);
 
     if (loading) {

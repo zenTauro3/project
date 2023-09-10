@@ -20,7 +20,7 @@ function Verify() {
     if (loading) {
         return <Loader />
     } else {
-        return verified ? <div>Verified</div> : <div>Error verifying</div>
+        return verified ? <div>Verified, let's login</div> : <div>Error verifying</div>
     }
 };
 

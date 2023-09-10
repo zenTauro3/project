@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
 import { addUser } from "../actions/user";
 import auth from "../services/auth";
-import Error503 from "../components/Error503";
+import { Error503 } from "../components/Errors";
 import Loader from "../components/Loader";
 
 function PrivateRoute({ component }: { component: React.ReactNode }) {

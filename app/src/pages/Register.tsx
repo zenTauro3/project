@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import GoogleButton from "../components/GoogleButton";
+import { GoogleButton } from "../components/Buttons";
 import { register, check } from "../services/register";
 
 function Register() {
@@ -77,9 +77,11 @@ function Register() {
     return (
         <div className="min-h-screen bg-gray-200 flex items-center justify-center">
             <div className="bg-white p-8 rounded shadow-md w-96 text-center">
-                <form className="space-y-4" onSubmit={handleRegister}>
-                    <Link to="/" className="mb-4 block text-blue-500 items-center text-left">&#8617; Return</Link>
-                    <h1 className="text-xl mb-4">Create an account</h1>
+                <div className="mb-4 text-left">
+                    <Link to="/" className="text-blue-500">&#8617; Return</Link>
+                </div>
+                <form className="mb-4 space-y-4" onSubmit={handleRegister}>
+                    <h1 className="text-2xl mb-2">Create an account</h1>
                     <input value={username} onChange={handleUsername} type="text" placeholder="Username"
                         className="w-full border rounded-md py-2 px-3 focus:outline-none" />
                     {usernameError && <p className="text-red-500 mt-1 text-sm">{usernameError}</p>}
@@ -99,11 +101,11 @@ function Register() {
                     <p className="mx-4 text-gray-500">or</p>
                     <div className="border-t border-gray-300 flex-grow"></div>
                 </div>
-                <div className="flex justify-center mb-4">
+                <div className="mb-4 flex flex-col justify-center">
                     <GoogleButton />
                 </div>
-                <div className="text-blue-500">
-                    <Link to="/auth/login" className="hover:underline">Already have an account?</Link>
+                <div className="">
+                    <Link to="/auth/login" className="text-blue-500 font-medium hover:underline">Already have an account?</Link>
                 </div>
             </div>
         </div>

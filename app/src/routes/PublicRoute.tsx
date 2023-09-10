@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import auth from "../services/auth";
-import Error503 from "../components/Error503";
+import { Error503 } from "../components/Errors";
 import Loader from "../components/Loader";
 
 function PublicRoute({ component }: { component: React.ReactNode }) {

@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { VerifySuccess } from "../components/Success";
+import { VerifyError } from "../components/Errors";
 import verify from "../services/verify";
 import Loader from "../components/Loader";
 
@@ -20,7 +22,7 @@ function Verify() {
     if (loading) {
         return <Loader />
     } else {
-        return verified ? <div>Verified, let's login</div> : <div>Error verifying</div>
+        return verified ? <VerifySuccess /> : <VerifyError />
     }
 };
 

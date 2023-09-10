@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import GoogleButton from "../components/GoogleButton";
+import { GoogleButton } from "../components/Buttons";
 import login from "../services/login"
 import Cookies from "js-cookie";
 
@@ -38,9 +38,11 @@ function Login() {
     return (
         <div className="min-h-screen bg-gray-200 flex items-center justify-center">
             <div className="bg-white p-8 rounded shadow-md w-96 text-center">
-                <form className="space-y-4" onSubmit={handleLogin}>
-                    <Link to="/" className="mb-4 block text-blue-500 items-center text-left">&#8617; Return</Link>
-                    <h1 className="text-xl mb-4">Welcome back</h1>
+                <div className="mb-4 text-left">
+                    <Link to="/" className="text-blue-500">&#8617; Return</Link>
+                </div>
+                <form className="mb-4 space-y-4" onSubmit={handleLogin}>
+                    <h1 className="text-2xl mb-2">Welcome back!</h1>
                     <input value={email} onChange={handleEmail} type="email" placeholder="Email"
                         className="w-full border rounded-md py-2 px-3 focus:outline-none" />
                     <input value={password} onChange={handlePassword} type="password" placeholder="Password"
@@ -55,11 +57,11 @@ function Login() {
                     <p className="mx-4 text-gray-500">or</p>
                     <div className="border-t border-gray-300 flex-grow"></div>
                 </div>
-                <div className="flex justify-center mb-4">
+                <div className="mb-4 flex flex-col">
                     <GoogleButton />
                 </div>
-                <div className="text-blue-500">
-                    <Link to="/auth/register" className="hover:underline">Don't have an account yet?</Link>
+                <div className="">
+                    <Link to="/auth/register" className="hover:underline font-medium text-blue-500">Don't have an account yet?</Link>
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 // Constantes para valores estáticos
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT;
 
-const GoogleRegister: React.FC = () => {
+const GoogleButton: React.FC = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
@@ -64,10 +64,10 @@ const GoogleRegister: React.FC = () => {
 
   return (
     <>
-      <div id="g_id_signin"></div>
-      <p>{message}</p>
+      <div className='flex justify-center' id="g_id_signin"></div>
+      {message && <p className='mt-4 text-red-500'>{message}</p>}
     </>
   )
 };
 
-export default GoogleRegister;
+export { GoogleButton };

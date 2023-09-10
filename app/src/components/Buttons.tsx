@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import google from '../services/google';
 import Cookies from 'js-cookie';
 
@@ -23,8 +23,6 @@ const GoogleButton: React.FC = () => {
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
     script.async = true;
-
-    document.head.appendChild(script);
 
     script.onload = () => {
       (window as any).google.accounts.id.initialize({
@@ -52,6 +50,8 @@ const GoogleButton: React.FC = () => {
     script.onerror = () => {
       console.error('Error al cargar el script de Google Sign-In.');
     };
+
+    document.head.appendChild(script);
 
     return () => {
       document.head.removeChild(script);

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
-import { addUser } from "../actions/user";
 import auth from "../services/auth";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/actions/user";
 import { Error503 } from "../components/Errors";
 import Loader from "../components/Loader";
 
@@ -22,7 +22,6 @@ function PrivateRoute({ component }: { component: React.ReactNode }) {
                 setUser(false)
             })
             .finally(() => setLoading(false))
-
     }, [dispatch, token])
 
     if (loading) {

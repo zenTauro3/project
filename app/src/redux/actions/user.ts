@@ -1,4 +1,4 @@
-import { ADD_USER} from "../config/constants"
+import { ADD_USER} from "../../config/constants"
 
 interface UserData {
     username: string,

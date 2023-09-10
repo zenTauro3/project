@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { getUser } from "../actions/user";
+import { getUser } from "../redux/actions/user";
 import Cookies from "js-cookie";
 
 function Home() {
